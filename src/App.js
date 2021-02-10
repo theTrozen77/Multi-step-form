@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
+import "./App.css";
+import MultistepForm from "./components/MultistepForm";
+import ReviewPage from "./components/ReviewPage";
+import UserDetails from "./components/UserDetails";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const userDetails = {
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    facebook: "",
+    twitter: "",
+  };
+  const [values, setValues] = useState(userDetails);
+  const [step, setStep] = useState(1);
+  const handleNext = (e) => {
+    e.preventDefault();
+    setStep(step + 1);
+  };
+
+  const handlePrevious = () => {
+    setStep(step - 1);
+  };
+
+  const handleInputChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  switch (step) {
+    case 1:
+      return (
+        <MultistepForm
+          values={values}
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+          setValues={setValues}
+          handleInputChange={handleInputChange}
+        />
+      );
+    case 2:
+      return (
+        <UserDetails
+          values={values}
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+          setValues={setValues}
+          handleInputChange={handleInputChange}
+        />
+      );
+    case 3:
+      return <ReviewPage values={values} handlePrevious={handlePrevious} />;
+  }
 }
 
 export default App;
